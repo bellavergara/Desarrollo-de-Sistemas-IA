@@ -181,3 +181,6 @@ def ruta_valida_peso(grafo, origen, destino, peso):
                 q.append((vecino, camino + [vecino]))
 
     return None
+
+
+# ejercicios de repaso examen" 
