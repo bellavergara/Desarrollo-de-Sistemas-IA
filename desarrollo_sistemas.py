@@ -184,3 +184,45 @@ def ruta_valida_peso(grafo, origen, destino, peso):
 
 
 # ejercicios de repaso examen" 
+
+from collections import deque
+
+def min_camino_jarras(x_cap, y_cap, objetivo):
+    start = (0,0)
+    q = deque([start])
+    padres = {start: None}
+    acciones = {}  # para reconstruir acción textual opcional
+
+    while q:
+        a,b = q.popleft()
+        if a == objetivo or b == objetivo:
+            # reconstruir camino
+            path = []
+            cur = (a,b)
+            while cur is not None:
+                path.append(cur)
+                cur = padres[cur]
+            return list(reversed(path))
+
+        movs = []
+        # llenar
+        movs.append((x_cap, b))
+        movs.append((a, y_cap))
+        # vaciar
+        movs.append((0, b))
+        movs.append((a, 0))
+        # pasar X->Y
+        t = min(a, y_cap - b)
+        movs.append((a - t, b + t))
+        # pasar Y->X
+        t = min(b, x_cap - a)
+        movs.append((a + t, b - t))
+
+        for nxt in movs:
+            if nxt not in padres:
+                padres[nxt] = (a,b)
+                q.append(nxt)
+    return None
+
+# Ejemplo
+print(min_camino_jarras(3,5,4))  # ejemplo clásico: medir 4 con jarras 3 y 5
