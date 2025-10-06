@@ -226,3 +226,64 @@ def min_camino_jarras(x_cap, y_cap, objetivo):
 
 # Ejemplo
 print(min_camino_jarras(3,5,4))  # ejemplo clásico: medir 4 con jarras 3 y 5
+
+from collections import deque
+
+def laberinto_con_llaves(grid):
+    m = len(grid)
+    n = len(grid[0])
+    start = (0, 0)
+    target = (m-1, n-1)
+    # map llave char a-f a bit 0-5
+    def char_to_keybit(c):
+        return 1 << (ord(c) - ord('a'))
+
+    # BFS
+    q = deque()
+    visited = set()
+    padres = {}  # (i,j,mask) -> (prev_state)
+    q.append((0,0,0,0))  # i,j,mask,dist
+    visited.add((0,0,0))
+    padres[(0,0,0)] = None
+
+    dirs = [(1,0),(-1,0),(0,1),(0,-1)]
+    while q:
+        i,j,mask,dist = q.popleft()
+        if (i,j) == target:
+            # reconstruir
+            path = []
+            cur = (i,j,mask)
+            while cur is not None:
+                path.append((cur[0], cur[1]))
+                cur = padres[cur]
+            return dist, list(reversed(path))
+        for di,dj in dirs:
+            ni, nj = i+di, j+dj
+            if 0 <= ni < m and 0 <= nj < n:
+                c = grid[ni][nj]
+                if c == '#':
+                    continue
+                nmask = mask
+                # si es llave
+                if 'a' <= c <= 'f':
+                    nmask = mask | char_to_keybit(c)
+                # si es puerta
+                if 'A' <= c <= 'F':
+                    required = char_to_keybit(c.lower())
+                    if not (mask & required):
+                        continue
+                state = (ni, nj, nmask)
+                if state not in visited:
+                    visited.add(state)
+                    padres[state] = (i,j,mask)
+                    q.append((ni, nj, nmask, dist+1))
+    return None  # imposible
+
+# Ejemplo:
+grid = [
+    ".a.",
+    "A#.",
+    "..b"
+]
+print(laberinto_con_llaves(grid))
+# Devuelve (distancia, camino) o None si imposible
