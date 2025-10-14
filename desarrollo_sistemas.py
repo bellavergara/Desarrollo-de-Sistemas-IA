@@ -285,5 +285,6 @@ grid = [
     "A#.",
     "..b"
 ]
+
 print(laberinto_con_llaves(grid))
-# Devuelve (distancia, camino) o None si imposible
+# Devuelve si la distancia  (distancia, camino) o None si imposible
