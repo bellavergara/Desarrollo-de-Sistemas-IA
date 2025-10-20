@@ -268,6 +268,7 @@ def laberinto_con_llaves(grid):
                 if 'a' <= c <= 'f':
                     nmask = mask | char_to_keybit(c)
                 # si es puerta
+
                 if 'A' <= c <= 'F':
                     required = char_to_keybit(c.lower())
                     if not (mask & required):
@@ -277,7 +278,7 @@ def laberinto_con_llaves(grid):
                     visited.add(state)
                     padres[state] = (i,j,mask)
                     q.append((ni, nj, nmask, dist+1))
-    return None  # imposible
+    return None  # imposible no se puede 
 
 # Ejemplo:
 grid = [
